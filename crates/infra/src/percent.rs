@@ -57,6 +57,53 @@ pub fn is_unreserved_rfc3986(byte: u8) -> bool {
     ascii::is_ascii_alphanumeric(byte) || matches!(byte, b'-' | b'.' | b'_' | b'~')
 }
 
+/// x-www-form-urlencoded style encode (space -> '+', others percent-encoded unless unreserved).
+pub fn form_urlencode(input: &[u8]) -> String {
+    let mut out = String::with_capacity(input.len() * 3);
+    for &b in input {
+        match b {
+            b' ' => out.push('+'),
+            b if is_unreserved_rfc3986(b) => out.push(b as char),
+            b => {
+                out.push('%');
+                const HEX: &[u8; 16] = b"0123456789ABCDEF";
+                out.push(HEX[(b >> 4) as usize] as char);
+                out.push(HEX[(b & 0x0F) as usize] as char);
+            }
+        }
+    }
+    out
+}
+
+/// x-www-form-urlencoded style decode ('+' -> space, %HH handled; returns error on invalid triplet).
+pub fn form_urldecode(input: &str) -> Result<Vec<u8>, String> {
+    let bytes = input.as_bytes();
+    let mut out: Vec<u8> = Vec::with_capacity(bytes.len());
+    let mut i = 0;
+    while i < bytes.len() {
+        match bytes[i] {
+            b'+' => {
+                out.push(b' ');
+                i += 1;
+            }
+            b'%' => {
+                if i + 2 >= bytes.len() {
+                    return Err("truncated percent escape".to_string());
+                }
+                let hi = ascii::hex_value(bytes[i + 1]).ok_or_else(|| "invalid hex in percent escape".to_string())?;
+                let lo = ascii::hex_value(bytes[i + 2]).ok_or_else(|| "invalid hex in percent escape".to_string())?;
+                out.push((hi << 4) | lo);
+                i += 3;
+            }
+            b => {
+                out.push(b);
+                i += 1;
+            }
+        }
+    }
+    Ok(out)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -78,6 +125,15 @@ mod tests {
     fn decode_error() {
         assert!(percent_decode("%G0").is_err());
         assert!(percent_decode("%0").is_err());
+    }
+
+    #[test]
+    fn form_urlencoding_roundtrip() {
+        let src = "a b+c%";
+        let enc = form_urlencode(src.as_bytes());
+        assert_eq!(enc, "a+b%2Bc%25");
+        let dec = form_urldecode(&enc).unwrap();
+        assert_eq!(String::from_utf8(dec).unwrap(), src);
     }
 }
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Core infrastructure for Selenet
 //! Infrastructure crate for Selenet
 //! This crate hosts foundational utilities used across the project.
 

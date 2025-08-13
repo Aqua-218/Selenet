@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// ASCII utilities aligned with WHATWG Infra behaviors where applicable.
+// Note: These functions operate on ASCII bytes only. Callers must validate input range when needed.
 /// ASCII utilities aligned with WHATWG Infra behaviors where applicable.
 /// Note: These functions operate on ASCII bytes only. Callers must validate input range when needed.
 
