@@ -1,6 +1,12 @@
 Selenet Browser
 ================
 
+Status
+------
+[![Policy CI](https://img.shields.io/github/actions/workflow/status/SeleniaProject/Selenet/policy.yml?label=policy%20CI)](https://github.com/SeleniaProject/Selenet/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-blue.svg)](CONTRIBUTING.md)
+
 Overview (English)
 ------------------
 Selenet is an experimental, privacy-first, performance-oriented web browser project aiming for high compatibility with open standards. The long-term goal is a fully self-hosted stack (HTML/CSS/JS engine, networking, storage, UI/DevTools) without C/C++ or C-based binary dependencies.
@@ -48,5 +54,13 @@ Repository documentation will be written in both English and Japanese where appr
 Contributing
 ------------
 Small, focused commits with clear English messages are required. Keep changes logically scoped and traceable back to specifications. Avoid introducing C/C++ or C-based binary dependencies.
+
+Community
+---------
+- Code of Conduct: see `CODE_OF_CONDUCT.md`
+- Security Policy: see `SECURITY.md`
+- Support: see `SUPPORT.md`
+- Governance: see `GOVERNANCE.md`
+- Funding: GitHub Sponsors via profile `SeleniaProject`
 
 
