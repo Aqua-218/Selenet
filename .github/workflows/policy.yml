@@ -1,0 +1,46 @@
+name: policy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  policy-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure spec/ and TODO.md are not tracked
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-files --error-unmatch spec >/dev/null 2>&1; then
+            echo "spec/ must not be tracked" >&2
+            exit 1
+          fi
+          if git ls-files --error-unmatch TODO.md >/dev/null 2>&1; then
+            echo "TODO.md must not be tracked" >&2
+            exit 1
+          fi
+
+      - name: Detect C/C++ or native binary traces
+        shell: bash
+        run: |
+          set -euo pipefail
+          forbidden=$(git ls-files | grep -E '\\.(c|cc|cpp|cxx|h|hpp|dll|so|dylib)$' || true)
+          if [ -n "$forbidden" ]; then
+            echo "Forbidden files detected:" >&2
+            echo "$forbidden" >&2
+            exit 1
+          fi
+
+      - name: Verify .gitattributes and .editorconfig present
+        shell: bash
+        run: |
+          test -f .gitattributes && grep -q 'eol=lf' .gitattributes
+          test -f .editorconfig
+
+
