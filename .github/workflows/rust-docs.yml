@@ -1,0 +1,17 @@
+name: rust-docs
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build docs
+        run: cargo doc --workspace --no-deps
+
+
