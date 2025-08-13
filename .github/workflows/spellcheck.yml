@@ -1,0 +1,16 @@
+name: spellcheck
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  cspell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run cspell
+        run: npx --yes cspell@latest --no-progress --no-summary --config cspell.json "**/*.md" "!spec/**" "!TODO.md"
+

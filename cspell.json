@@ -1,0 +1,16 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "files": ["**/*.md", "!spec/**", "!TODO.md"],
+  "ignorePaths": ["spec/**", "TODO.md"],
+  "ignoreRegExpList": [
+    "[\\u3040-\\u30FF\\u4E00-\\u9FFF\\u3400-\\u4DBF]+" 
+  ],
+  "dictionaries": ["en_US"],
+  "overrides": [
+    {
+      "filename": "**/*.md",
+      "caseSensitive": false
+    }
+  ]
+}

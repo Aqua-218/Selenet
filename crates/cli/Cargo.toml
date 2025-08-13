@@ -1,0 +1,11 @@
+[package]
+name = "selenet-cli"
+version = "0.0.0"
+edition = "2021"
+license = "MIT"
+description = "Selenet command line interface"
+
+[dependencies]
+selenet-infra = { path = "../infra" }
+
+

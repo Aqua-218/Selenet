@@ -1,0 +1,10 @@
+[package]
+name = "selenet-infra"
+version = "0.0.0"
+edition = "2021"
+license = "MIT"
+description = "Core infrastructure utilities (byte/char ops, error handling stubs)"
+
+[dependencies]
+
+
