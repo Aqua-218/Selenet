@@ -1,0 +1,7 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions / 質問
+    url: https://github.com/SeleniaProject/Selenet/discussions
+    about: Please use Discussions for Q&A
+
+
