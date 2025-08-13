@@ -5,8 +5,8 @@ use std::env;
 fn print_help() {
     println!("Selenet CLI\n");
     println!("USAGE:\n  selenet <command> [args]\n");
-    println!("COMMANDS:\n  encode <text>             Percent-encode input (RFC3986 unreserved as-is)\n  decode <text>             Percent-decode input\n  url encode [--form] <t>   URL encode (RFC3986 or form mode)\n  url decode [--form] <t>   URL decode (RFC3986 or form mode)\n  help                      Show this help\n");
-    println!("日本語:\n  encode <text>             入力をパーセントエンコード（RFC3986 非予約は素通し）\n  decode <text>             入力をパーセントデコード\n  url encode [--form] <t>   URL エンコード（RFC3986/フォーム互換）\n  url decode [--form] <t>   URL デコード（RFC3986/フォーム互換）\n  help                      このヘルプを表示\n");
+    println!("COMMANDS:\n  encode <text>             Percent-encode input (RFC3986 unreserved as-is)\n  decode <text>             Percent-decode input\n  url encode [--form] <t>   URL encode (RFC3986 or form mode)\n  url decode [--form] <t>   URL decode (RFC3986 or form mode)\n  url parse <url>           Parse URL into components\n  url serialize <url>       Parse then serialize URL\n  help                      Show this help\n");
+    println!("日本語:\n  encode <text>             入力をパーセントエンコード（RFC3986 非予約は素通し）\n  decode <text>             入力をパーセントデコード\n  url encode [--form] <t>   URL エンコード（RFC3986/フォーム互換）\n  url decode [--form] <t>   URL デコード（RFC3986/フォーム互換）\n  url parse <url>           URL を解析して構成要素を表示\n  url serialize <url>       URL を解析して正規化して出力\n  help                      このヘルプを表示\n");
 }
 
 fn main() {
@@ -54,6 +54,29 @@ fn main() {
                     match res {
                         Ok(bytes) => println!("{}", String::from_utf8_lossy(&bytes)),
                         Err(e) => { eprintln!("decode error: {}", e); std::process::exit(1); }
+                    }
+                }
+                Some("parse") => {
+                    let text = args.collect::<Vec<_>>().join(" ");
+                    match selenet_infra::url::Url::parse(&text) {
+                        Ok(u) => {
+                            println!("scheme: {}", u.scheme);
+                            if !u.username.is_empty() { println!("username: {}", u.username); }
+                            if let Some(p) = &u.password { println!("password: {}", p); }
+                            println!("host: {}", match u.host { selenet_infra::url::Host::Domain(ref d)=>d.clone(), selenet_infra::url::Host::Ipv4(ip)=>ip.to_string(), selenet_infra::url::Host::Ipv6(ip)=>format!("[{}]", ip)});
+                            if let Some(port) = u.port { println!("port: {}", port); }
+                            if !u.path.is_empty() { println!("path: /{}", u.path.join("/")); }
+                            if let Some(q) = u.query { println!("query: {}", q); }
+                            if let Some(f) = u.fragment { println!("fragment: {}", f); }
+                        }
+                        Err(e) => { eprintln!("parse error: {}", e); std::process::exit(1); }
+                    }
+                }
+                Some("serialize") => {
+                    let text = args.collect::<Vec<_>>().join(" ");
+                    match selenet_infra::url::Url::parse(&text) {
+                        Ok(u) => println!("{}", u.serialize()),
+                        Err(e) => { eprintln!("parse error: {}", e); std::process::exit(1); }
                     }
                 }
                 _ => print_help(),
