@@ -1,5 +1,7 @@
 //! Infrastructure crate for Selenet
-//! This crate will host foundational utilities used across the project.
+//! This crate hosts foundational utilities used across the project.
+
+pub mod ascii;
 
 /// Returns true if the given byte is an ASCII whitespace per Infra definition (subset placeholder).
 /// This is a minimal placeholder and will be extended to match WHATWG Infra precisely.
