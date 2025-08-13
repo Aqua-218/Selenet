@@ -1,0 +1,19 @@
+name: markdownlint
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run markdownlint-cli2 (via npx)
+        run: npx --yes markdownlint-cli2 "**/*.md" "#spec/**" "!TODO.md"
+
+

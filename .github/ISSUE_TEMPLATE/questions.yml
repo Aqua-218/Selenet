@@ -1,0 +1,25 @@
+name: Question / 質問
+description: Ask a question about Selenet
+labels: [question]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please consider using Discussions for general Q&A. If you still prefer an issue, fill the form below.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: Short description of your question
+      placeholder: e.g., How does the policy CI check work?
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Provide necessary context, links, or screenshots
+    validations:
+      required: false
+
+
